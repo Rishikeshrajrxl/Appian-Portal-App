@@ -1,0 +1,57 @@
+a!localVariables(
+  local!DarkMode: false(),
+  a!cardLayout(
+    showBorder: false(),
+    height: "AUTO",
+    contents: {
+      a!sectionLayout(
+        contents: {
+          a!columnsLayout(
+            columns: {
+              a!columnLayout(),
+              a!columnLayout(width: "8X", ),
+              a!columnLayout(
+                width: "1X",
+                contents: {
+                  a!cardLayout(
+                    contents: {
+                      a!richTextDisplayField(
+                        align: "CENTER",
+                        value: a!richTextItem(
+                          text: if(
+                            toboolean(local!DarkMode),
+                            "Light",
+                            "Dark",
+                          ),
+                          style: "STRONG",
+                        )
+                      )
+                    },
+                    style: if(
+                      toboolean(local!DarkMode),
+                      "#f7f6f2",
+                      "#2d2e2d"
+                    ),
+                    link: a!dynamicLink(
+                      saveInto: if(
+                        toboolean(local!DarkMode),
+                        a!save(local!DarkMode, false()),
+                        a!save(local!DarkMode, true())
+                      )
+                    ),
+                    shape: "ROUNDED"
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
+    },
+    style: if(
+      toboolean(local!DarkMode),
+      "#2d2e2d",
+      "#f7e9d0"
+    )
+  )
+)
