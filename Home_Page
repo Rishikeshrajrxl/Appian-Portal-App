@@ -1,57 +1,177 @@
 a!localVariables(
   local!DarkMode: false(),
-  a!cardLayout(
-    showBorder: false(),
-    height: "AUTO",
-    contents: {
-      a!sectionLayout(
-        contents: {
-          a!columnsLayout(
-            columns: {
-              a!columnLayout(),
-              a!columnLayout(width: "8X", ),
-              a!columnLayout(
-                width: "1X",
-                contents: {
-                  a!cardLayout(
-                    contents: {
-                      a!richTextDisplayField(
-                        align: "CENTER",
-                        value: a!richTextItem(
-                          text: if(
-                            toboolean(local!DarkMode),
-                            "Light",
-                            "Dark",
-                          ),
-                          style: "STRONG",
+  local!SelectedCategory,
+  {
+    /*Upper Section*/
+    a!cardLayout(
+      showBorder: false(),
+      height: "AUTO",
+      contents: {
+        a!sectionLayout(
+          contents: {
+            a!columnsLayout(
+              columns: {
+                a!columnLayout(
+                  width: "2X",
+                  contents: {
+                    a!sideBySideLayout(
+                      items: {
+                        a!sideBySideItem(
+                          item: a!richTextDisplayField(
+                            align: "CENTER",
+                            value: {
+                              a!richTextIcon(icon: "HOME", ),
+                              "  ",
+                              a!richTextItem(text: "Main Stream", style: "STRONG", )
+                            }
+                          )
+                        )
+                      }
+                    )
+                  }
+                ),
+                a!columnLayout(width: "8X", ),
+                a!columnLayout(
+                  width: "1X",
+                  contents: {
+                    a!cardLayout(
+                      contents: {
+                        a!richTextDisplayField(
+                          align: "CENTER",
+                          value: a!richTextItem(
+                            text: if(
+                              toboolean(local!DarkMode),
+                              "Light",
+                              "Dark",
+                              
+                            ),
+                            style: "STRONG",
+                            
+                          )
+                        )
+                      },
+                      style: if(
+                        toboolean(local!DarkMode),
+                        "#f7f6f2",
+                        "#2d2e2d"
+                      ),
+                      link: a!dynamicLink(
+                        saveInto: if(
+                          toboolean(local!DarkMode),
+                          a!save(local!DarkMode, false()),
+                          a!save(local!DarkMode, true())
+                        )
+                      ),
+                      shape: "ROUNDED"
+                    )
+                  }
+                )
+              }
+            )
+          }
+        )
+      },
+      style: if(
+        toboolean(local!DarkMode),
+        "#2d2e2d",
+        "#fcfbf7"
+      ),
+      shape: "ROUNDED",
+      
+    ),
+    /*Main Body*/
+    a!cardLayout(
+      contents: {
+        a!columnsLayout(
+          columns: {
+            /*First Column Section*/
+            a!columnLayout(
+              width: "NARROW",
+              contents: {
+                /*Top Categories Section*/
+                a!cardLayout(
+                  shape: "ROUNDED",
+                  showBorder: false(),
+                  contents: {
+                    a!richTextDisplayField(
+                      value: a!richTextItem(
+                        text: "Top Categories",
+                        Style: "STRONG",
+                        size: "SMALL"
+                      )
+                    ),
+                    a!forEach(
+                      items: enumerate(5),
+                      expression: a!cardLayout(
+                        decorativeBarPosition: "END",
+                        decorativeBarColor: "POSITIVE",
+                        marginBelow: "LESS",
+                        contents: {
+                          a!sideBySideLayout(
+                            items: {
+                              a!sideBySideItem(
+                                item: a!richTextDisplayField(value: a!richTextIcon(icon: "filter", ))
+                              ),
+                              a!sideBySideItem(
+                                item: a!richTextDisplayField(
+                                  value: {
+                                    a!richTextItem(text: "Sports", style: "STRONG", ),
+                                    char(10),
+                                    a!richTextItem(text: "101 Post", size: "SMALL")
+                                  }
+                                )
+                              )
+                            }
+                          )
+                        },
+                        shape: "ROUNDED",
+                        link: a!dynamicLink(
+                          saveInto: a!save(local!SelectedCategory, fv!index)
                         )
                       )
-                    },
-                    style: if(
-                      toboolean(local!DarkMode),
-                      "#f7f6f2",
-                      "#2d2e2d"
-                    ),
-                    link: a!dynamicLink(
-                      saveInto: if(
-                        toboolean(local!DarkMode),
-                        a!save(local!DarkMode, false()),
-                        a!save(local!DarkMode, true())
+                    )
+                  }
+                )
+              }
+            ),
+            /*Middle Column Section*/
+            a!columnLayout(
+              width: "4X",
+              contents: {
+                a!cardLayout(
+                  shape: "ROUNDED",
+                  decorativeBarPosition: "TOP",
+                  decorativeBarColor: "POSITIVE"
+                )
+              }
+            ),
+            /*Last Column Section*/
+            a!columnLayout(
+              contents: {
+                a!cardLayout(
+                  shape: "ROUNDED",
+                  showBorder: false(),
+                  contents: {
+                    a!richTextDisplayField(
+                      value: a!richTextItem(
+                        text: "Popular Posts",
+                        Style: "STRONG",
+                        size: "SMALL"
                       )
-                    ),
-                    shape: "ROUNDED"
-                  )
-                }
-              )
-            }
-          )
-        }
-      )
-    },
-    style: if(
-      toboolean(local!DarkMode),
-      "#2d2e2d",
-      "#f7e9d0"
+                    )
+                  }
+                )
+              }
+            )
+          }
+        )
+      },
+      style: if(
+        toboolean(local!DarkMode),
+        "#b3b1b2",
+        "#fcf5fb"
+      ),
+      
     )
-  )
+  }
 )
