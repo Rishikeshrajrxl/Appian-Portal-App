@@ -1,0 +1,51 @@
+a!queryEntity(
+  entity: cons!DataStoreEntity[1],
+  query: a!query(
+    selection:if(
+      rule!R_NullCheck(ri!Column),
+      {},
+      a!querySelection(
+        columns: a!forEach(
+          items: 1 + enumerate(length(ri!Column)),
+          expression: a!queryColumn(ri!Column[fv!item])
+        )
+      )
+    ),
+    logicalexpression: if(
+      and(
+        rule!R_NullCheck(ri!CategoriesId),
+        rule!R_NullCheck(ri!Name),
+        
+      ),
+      null,
+      a!queryLogicalExpression(
+        operator: "AND",
+        filters: {
+          if(
+            rule!R_NullCheck(ri!CategoriesId),
+            {},
+            a!queryFilter(field: "CategoryId", operator: "in", value: { ri!CategoriesId })
+          ),
+          if(
+            rule!R_NullCheck(ri!Name),
+            {},
+            a!queryFilter(
+              field: "Name",
+              operator: "in",
+              value: { ri!Name }
+            )
+          ),
+        }
+      )
+    ),
+    paginginfo: if(
+      rule!R_NullCheck(ri!PagingInfo),
+      a!pagingInfo(
+        startIndex: 1,
+        batchSize: - 1,
+        sort: a!sortInfo(field: "CategoryId")
+      ),
+      ri!PagingInfo
+    )
+  )
+).data
