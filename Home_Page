@@ -1,6 +1,9 @@
 a!localVariables(
   local!DarkMode: false(),
   local!SelectedCategory,
+  local!Categories: rule!R_Categories_QE(
+    PagingInfo: a!pagingInfo(1,-1)
+  ),
   {
     /*Upper Section*/
     a!cardLayout(
@@ -101,7 +104,7 @@ a!localVariables(
                       )
                     ),
                     a!forEach(
-                      items: enumerate(5),
+                      items: local!Categories,
                       expression: a!cardLayout(
                         decorativeBarPosition: "END",
                         decorativeBarColor: "POSITIVE",
@@ -115,7 +118,7 @@ a!localVariables(
                               a!sideBySideItem(
                                 item: a!richTextDisplayField(
                                   value: {
-                                    a!richTextItem(text: "Sports", style: "STRONG", ),
+                                    a!richTextItem(text: index(fv!item,"Name",{}), style: "STRONG", ),
                                     char(10),
                                     a!richTextItem(text: "101 Post", size: "SMALL")
                                   }
