@@ -1,9 +1,8 @@
 a!localVariables(
   local!DarkMode: false(),
   local!SelectedCategory,
-  local!Categories: rule!R_Categories_QE(
-    PagingInfo: a!pagingInfo(1,-1)
-  ),
+  local!Categories:rule!R_Categories_Integration().result.body,
+  local!Posts: rule!R_Posts_Integration().result.body,
   {
     /*Upper Section*/
     a!cardLayout(
@@ -120,7 +119,14 @@ a!localVariables(
                                   value: {
                                     a!richTextItem(text: index(fv!item,"Name",{}), style: "STRONG", ),
                                     char(10),
-                                    a!richTextItem(text: "101 Post", size: "SMALL")
+                                    a!richTextItem(
+                                      text: count(
+                                        wherecontains(
+                                          index(fv!item,"CategoryId",{}),
+                                          index(local!Posts,"CategoryId",{})
+                                        )
+                                      )&" Posts",
+                                      size: "SMALL")
                                   }
                                 )
                               )
@@ -129,7 +135,7 @@ a!localVariables(
                         },
                         shape: "ROUNDED",
                         link: a!dynamicLink(
-                          saveInto: a!save(local!SelectedCategory, fv!index)
+                          saveInto: a!save(local!SelectedCategory, fv!item)
                         )
                       )
                     )
