@@ -27,7 +27,13 @@ a!localVariables(
                               a!richTextIcon(icon: "HOME", ),
                               "  ",
                               a!richTextItem(
-                                text: "Main Stream", style: "STRONG", 
+                                text: "Main Stream",
+                                style: if(
+                                  toboolean(local!HomePage),
+                                  "STRONG",
+                                  {}
+                                ),
+                                color:"ACCENT",
                                 link: a!dynamicLink(
                                   saveInto: {
                                     a!save(local!HomePage,true()),
@@ -45,6 +51,12 @@ a!localVariables(
                           item: a!richTextDisplayField(
                             value: a!richTextItem(
                               text: "About Us",
+                              color:"ACCENT",
+                              style:  if(
+                                toboolean(local!AboutUSPage),
+                                "STRONG",
+                                {}
+                              ),
                               link: a!dynamicLink(
                                 saveInto: {
                                   a!save(local!AboutUSPage,true()),
@@ -110,6 +122,7 @@ a!localVariables(
     /*Main Body*/
     /*Main Stream*/
     a!cardLayout(
+      showBorder: false(),
       contents: {
         a!columnsLayout(
           columns: {
@@ -276,7 +289,7 @@ a!localVariables(
               contents: {
                 a!cardLayout(
                   shape: "ROUNDED",
-                  showBorder: false(),
+                  showBorder: true(),
                   contents: {
                     a!richTextDisplayField(
                       value: a!richTextItem(
@@ -295,9 +308,15 @@ a!localVariables(
       style: if(
         toboolean(local!DarkMode),
         "#b3b1b2",
-        "#fcf5fb"
+        {}
       ),
       showWhen: toboolean(local!HomePage)
+    ),
+    a!sectionLayout(
+      showWhen: toboolean(local!AboutUSPage),
+      contents: {
+        rule!R_AboutUsPage()
+      }
     )
   }
 )
