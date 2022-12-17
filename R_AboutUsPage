@@ -1,0 +1,36 @@
+ a!cardLayout(
+    showBorder: false(),
+    contents: {
+     a!columnsLayout(
+       columns: {
+         a!columnLayout(
+           width:"MEDIUM",
+           contents: {
+             a!imageField(
+               size: "LARGE",
+               images: a!documentImage(
+                 document: cons!R_ABOUTUS_IMAGE
+               )
+             )
+           }
+         ),
+         a!columnLayout(
+           contents: {
+             a!richTextDisplayField(
+               align: "LEFT",
+               marginBelow:"EVEN_MORE",
+               value: {
+                 char(10),char(10),char(10),char(10),char(10),
+                 char(10),char(10),char(10),char(10),char(10),
+                 a!richTextItem(
+                 text: "I am available on almost every social media. You can message me, I will reply within 24 hours. I can help you with Android Development, ML, Application Development, Web Development and Opensource Development."
+               )
+               }
+             )
+           }
+         )
+       }
+     )
+      
+    }
+  )
