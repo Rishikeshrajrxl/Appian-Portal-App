@@ -1,8 +1,10 @@
 a!localVariables(
   local!DarkMode: false(),
   local!SelectedCategory,
-  local!Categories:rule!R_Categories_Integration().result.body,
+  local!Categories: rule!R_Categories_Integration().result.body,
   local!Posts: rule!R_Posts_Integration().result.body,
+  local!AboutUSPage:false(),
+  local!HomePage:true(),
   {
     /*Upper Section*/
     a!cardLayout(
@@ -14,7 +16,7 @@ a!localVariables(
             a!columnsLayout(
               columns: {
                 a!columnLayout(
-                  width: "2X",
+                  width: "3X",
                   contents: {
                     a!sideBySideLayout(
                       items: {
@@ -24,8 +26,34 @@ a!localVariables(
                             value: {
                               a!richTextIcon(icon: "HOME", ),
                               "  ",
-                              a!richTextItem(text: "Main Stream", style: "STRONG", )
+                              a!richTextItem(
+                                text: "Main Stream", style: "STRONG", 
+                                link: a!dynamicLink(
+                                  saveInto: {
+                                    a!save(local!HomePage,true()),
+                                    a!save(local!AboutUSPage,false()),
+                                    }
+                                  
+                                ),
+                                linkStyle: "STANDALONE"
+                              ),
+                              
                             }
+                          )
+                        ),
+                        a!sideBySideItem(
+                          item: a!richTextDisplayField(
+                            value: a!richTextItem(
+                              text: "About Us",
+                              link: a!dynamicLink(
+                                saveInto: {
+                                  a!save(local!AboutUSPage,true()),
+                                  a!save(local!HomePage,false()),
+                                  }
+                              ),
+                              linkStyle: "STANDALONE"
+                              
+                            )
                           )
                         )
                       }
@@ -45,10 +73,8 @@ a!localVariables(
                               toboolean(local!DarkMode),
                               "Light",
                               "Dark",
-                              
                             ),
                             style: "STRONG",
-                            
                           )
                         )
                       },
@@ -82,6 +108,7 @@ a!localVariables(
       
     ),
     /*Main Body*/
+    /*Main Stream*/
     a!cardLayout(
       contents: {
         a!columnsLayout(
@@ -117,16 +144,20 @@ a!localVariables(
                               a!sideBySideItem(
                                 item: a!richTextDisplayField(
                                   value: {
-                                    a!richTextItem(text: index(fv!item,"Name",{}), style: "STRONG", ),
+                                    a!richTextItem(
+                                      text: index(fv!item, "Name", {}),
+                                      style: "STRONG",
+                                    ),
                                     char(10),
                                     a!richTextItem(
                                       text: count(
                                         wherecontains(
-                                          index(fv!item,"CategoryId",{}),
-                                          index(local!Posts,"CategoryId",{})
+                                          index(fv!item, "CategoryId", {}),
+                                          index(local!Posts, "CategoryId", {})
                                         )
-                                      )&" Posts",
-                                      size: "SMALL")
+                                      ) & " Posts",
+                                      size: "SMALL"
+                                    )
                                   }
                                 )
                               )
@@ -134,6 +165,11 @@ a!localVariables(
                           )
                         },
                         shape: "ROUNDED",
+                        style: if(
+                          tointeger(index(local!SelectedCategory,"CategoryId",{})) = tointeger(index(fv!item,"CategoryId",{})),
+                          "#bbfccc",
+                          {}
+                        ),
                         link: a!dynamicLink(
                           saveInto: a!save(local!SelectedCategory, fv!item)
                         )
@@ -150,7 +186,88 @@ a!localVariables(
                 a!cardLayout(
                   shape: "ROUNDED",
                   decorativeBarPosition: "TOP",
-                  decorativeBarColor: "POSITIVE"
+                  decorativeBarColor: "POSITIVE",
+                  contents: {
+                    a!sideBySideLayout(
+                      items: {
+                        a!sideBySideItem(
+                          item: a!richTextDisplayField(
+                            align:"CENTER",
+                            value: a!richTextItem(
+                              text: index(local!SelectedCategory,"Name",{}),
+                              style: "STRONG",
+                              size: "MEDIUM"
+                              
+                            )
+                          )
+                        )
+                      }
+                    ),
+                    a!sectionLayout(
+                      marginAbove: "NONE",
+                      divider: "BELOW",
+                      
+                    ),
+                    a!forEach(
+                      items: index(
+                        local!Posts,
+                        wherecontains(
+                        tointeger(index(local!SelectedCategory,"CategoryId",{})),
+                        tointeger(index(local!Posts,"CategoryId",{}))
+                      ),
+                        {}
+                      ),
+                      expression: a!cardLayout(
+                        marginBelow: "LESS",
+                        contents: {
+                          a!columnsLayout(
+                            columns: {
+                              a!columnLayout(
+                                width: "AUTO",
+                                contents: {
+                                  a!richTextDisplayField(
+                                    value: {
+                                      a!richTextImage(
+                                      image: a!userImage(
+                                        user: loggedInUser()
+                                      )
+                                    ),
+                                      "   ",
+                                      a!richTextItem(
+                                        text: "Rishikesh",
+                                        style: "STRONG",
+                                        size: "SMALL"
+                                      )
+                                    }
+                                  )
+                                }
+                              ),
+                             
+                            }
+                          ),
+                          a!columnsLayout(
+                            marginAbove: "MORE",
+                            marginBelow:  "MORE",
+                            columns: {
+                              a!columnLayout(
+                                width: "EXTRA_NARROW"
+                              ),
+                              a!columnLayout(
+                                contents: {
+                                  a!richTextDisplayField(
+                                    value: a!richTextItem(
+                                      text: index(fv!item,"Content",{})
+                                    )
+                                  )
+                                }
+                              )
+                            }
+                          )
+                        },
+                        shape: "ROUNDED"
+                      )
+                    )
+                  }
                 )
               }
             ),
@@ -180,7 +297,7 @@ a!localVariables(
         "#b3b1b2",
         "#fcf5fb"
       ),
-      
+      showWhen: toboolean(local!HomePage)
     )
   }
 )
